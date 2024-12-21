@@ -17,8 +17,8 @@ class DiscountSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     total_price = serializers.SerializerMethodField()
-    products = ProductSerializer(many=True)  # Nested serializer
-    discounts = DiscountSerializer(many=True)  # Nested serializer
+    products = ProductSerializer(many=True)
+    discounts = DiscountSerializer(many=True)
 
     class Meta:
         model = Order
