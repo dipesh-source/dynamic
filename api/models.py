@@ -2,7 +2,10 @@ from django.db import models
 from django.utils.timezone import now
 
 
-# 1. Product Management
+from datetime import date
+from django.db import models
+
+
 class Product(models.Model):
     name = models.CharField(max_length=255)
     base_price = models.FloatField()
@@ -12,17 +15,18 @@ class Product(models.Model):
     )
 
     def get_price(self, quantity=1):
-        if self.product_type == "seasonal":
-            return self.base_price * 0.8  # 20% discount for seasonal products
-        elif self.product_type == "bulk":
-            if 10 <= quantity <= 20:
-                return self.base_price * 0.95
-            elif 21 <= quantity <= 50:
-                return self.base_price * 0.9
-            elif quantity > 50:
-                return self.base_price * 0.85
-        elif self.product_type == "premium":
-            return self.base_price * 1.15  # 15% markup for premium products
+        raise NotImplementedError("Subclasses must implement the `get_price` method.")
+
+    class Meta:
+        abstract = True
+
+
+class SeasonalProduct(Product):
+    def get_price(self, quantity=1):
+        current_month = date.today().month
+        winter_months = [12, 1, 2]  # December, January, February
+        if current_month in winter_months:
+            return self.base_price * 0.8  # 20% off during winter
         return self.base_price
 
 
